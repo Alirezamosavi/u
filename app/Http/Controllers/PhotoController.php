@@ -11,7 +11,7 @@ class PhotoController extends Controller
     
   public function index()  // this function show data in Table
   {
-      return uploadimage::paginate();
+      return uploadimage::paginate(2);
   }
 
   public function store(Request $request)  // this function store or save new data in table
