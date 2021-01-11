@@ -18,6 +18,7 @@ window.Vue = Vue
 Vue.router = router
 Vue.use(VueRouter)
 
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 
 //Import v-from
