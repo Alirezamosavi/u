@@ -77,7 +77,8 @@
         </td>
       </tr>
     </tbody></table>
-    
+    <!-- set that here after finish get data from backend  -->
+ <pagination :data="tabledata"  @pagination-change-page="getResults" ></pagination>
 
     
 
@@ -144,6 +145,7 @@
         data(){
             return {
                 numbers:'',
+                page:'',
                 pag:'',
                 tabledata: {},
                 user:{},
@@ -230,10 +232,13 @@
             },
 
             //get Table data
-            loadTableData(){
-            
+            loadTableData(page){
+                if (typeof page === 'undefined') {
+                    page = 1;
+                }
 
-                axios.get('http://localhost:8000/api/photo?page=')
+
+                axios.get('http://localhost:8000/api/photo?page=' + page)
                    .then(({ data }) =>( this.tabledata = data))
                    .catch(()=>{
                       console.log("Error...")
@@ -241,12 +246,29 @@
             },
 
             // is here 
-          getResults() {  // get data from table by this function
+          getResults(page) {   // we must set varriable in where that get data from backaend
               
-                 axios.get('http://localhost:8000/api/photo?page=')
+                
+                  
+                  if (typeof page == 'undefined') {  // i sayed to function if page undefined get currentHost of href 
+   // and if currentHost  == exampleURL(http://localhost:8000/edit#) page = 1 (the number of 1 is first page of data that get from backaend for paginate) 				  
+                    var currentHost = window.location.href;
+                    var exampleURL = 'http://localhost:8000/edit#';
+                    if(currentHost == exampleURL){
+                      
+                    page = 1 ; 
+                    }else{ 
+					// for get number of page 1 set this function from js
+                      var numbers = currentHost.match(/\/edit#\/([0-9]+)/)[1];
+                      page = numbers ;
+                    
+                    }
+                  }
+				  // according page 1 can get data from backaend 
+                  axios.get('http://localhost:8000/api/photo?page=' + page)
                     .then(response => {
                       this.tabledata = response.data;
-                      //window.history.pushState('', '', '/edit#/'+pag);
+                      window.history.pushState('', '', '/edit#/'+page); // i set a varriable to currentHost of href
                   });
 
                 
